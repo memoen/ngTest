@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="logoBlock">
+    <h1 class="logoBlock__text">
+      Logo
+    </h1>
+  </div>
+  <div class="formInputBlock">
+    <form [formGroup]="loginForm">
+      <mat-form-field>
+        <mat-label>Login</mat-label>
+        <input matInput formControlName="email">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Pass</mat-label>
+        <input matInput formControlName="pass">
+      </mat-form-field>
+
+      <div class="submicForm">
+
+        <button class="actionButton loginBlock__register" mat-stroked-button (click)="register()">
+          <span>Register</span>
+        </button>
+        <button class="actionButton loginBlock__login" mat-stroked-button (click)="login()">
+          <span>LogIn</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+
+
+  <div class="loginBlock">
+    <button  class="actionButton loginBlock__facebook" mat-stroked-button (click)="submitLogin()">
+      <span>Facebook</span>
+    </button>
+  </div>
+</div>

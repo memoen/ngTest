@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="topNavBarBlock">
+    <div class="topNavBarBlock__viewType">
+
+      <mat-button-toggle-group (change)="setNewViewType($event)" [value]="ViewType">
+        <mat-button-toggle value="list" >
+          <span>List</span>
+        </mat-button-toggle>
+        <mat-button-toggle value="map">
+          <span>Map</span>
+        </mat-button-toggle>
+
+      </mat-button-toggle-group>
+    </div>
+    <div class="topNavBarBlock__search">
+      <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input matInput [formControl]="filterName">
+      </mat-form-field>
+    </div>
+    <div class="topNavBarBlock__navigate">
+      <button class="loginBlock__facebook" mat-stroked-button routerLink="/profile">
+        <span>Profile</span>
+      </button>
+    </div>
+  </div>
+
+
+  <ng-container [ngSwitch]="ViewType">
+    <div class="wrapper wrapper__map" *ngSwitchCase="'map'">
+      <app-map-view [filterAsync]="filterAsync"></app-map-view>
+    </div>
+    <div class="wrapper wrapper__list" *ngSwitchCase="'list'">
+      <app-list-view [filterAsync]="filterAsync"></app-list-view>
+    </div>
+  </ng-container>
+</div>

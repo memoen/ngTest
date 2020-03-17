@@ -1,0 +1,41 @@
+<div class="container">
+
+  <div class="userListBlock">
+
+    <div class="userListBlock__item" *ngFor="let user of resultAsync|async">
+      <div class="userInfo__img">
+
+        <img [src]="user.imageSrc" alt="">
+      </div>
+      <div class="userInfo__bio">
+        <div class="userBio">
+           <span class="userBio__name">
+           {{user.firstName}}
+           </span>
+          <div class="userBio__lastName">
+            {{user.lastName}}
+          </div>
+        </div>
+
+        <div class="address">
+          <span class="address__country">
+            {{user.country}}
+          </span>
+          <span class="address__city">
+            {{user.city}}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="paginatorBlock">
+
+      <mat-paginator [length]="resultLength"
+                     (page)="onPaginatorChange($event)"
+                     [pageSize]="pageLength">
+      </mat-paginator>
+    </div>
+
+  </div>

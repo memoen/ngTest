@@ -1,0 +1,5 @@
+<app-my-profile-page *ngIf="userData"
+  [editable]="true"
+  [userData]="userData"
+  (onSave)="saveNewUserData($event)"
+></app-my-profile-page>

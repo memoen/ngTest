@@ -1,0 +1,86 @@
+<ng-template #uploadImgEditable>
+  <div class="profilePictureBlock__img">
+    <div class="noImageTemplate"></div>
+    <img [src]="imgToShow" alt="">
+  </div>
+  <input type="file" #fileImg id="fileImg" (change)="onFileChange($event)">
+  <button mat-raised-button class="profilePictureBlock__button" (click)="editImg()">Edit profile image</button>
+</ng-template>
+
+<ng-template #uploadImg>
+  <div class="profilePictureBlock__img">
+    <div class="noImageTemplate"></div>
+    <img [src]="imgToShow" alt="">
+  </div>
+</ng-template>
+
+
+<ng-template #userBioEditable>
+  <form [formGroup]="userBioForm">
+    <mat-form-field>
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName">
+    </mat-form-field>
+
+    <mat-radio-group aria-label="Gender" formControlName="gender">
+      <mat-radio-button value="male">Male</mat-radio-button>
+      <mat-radio-button value="female">Female</mat-radio-button>
+    </mat-radio-group>
+
+  </form>
+</ng-template>
+
+<ng-template #userBio>
+  <div>
+    <div class="userBioRow ">
+      <span class="firstName">
+      {{userBioForm.get('firstName').value}}
+      </span>
+      <span class="lastName">
+        {{userBioForm.get('lastName').value}}
+      </span>
+    </div>
+
+    <div class="userBioRow location">
+      <span class="location__country">
+      {{userBioForm.get('country').value}}
+      </span>
+      ,
+      <span class="location__city">
+        {{userBioForm.get('city').value}}
+      </span>
+    </div>
+    <div class="userBioRow gender">
+      {{userBioForm.get('gender').value}}
+    </div>
+
+  </div>
+</ng-template>
+
+
+<div class="container profileBio">
+  <div class="profilePictureBlock profile__left" [ngSwitch]="editable">
+    <div *ngSwitchCase="true">
+      <ng-container *ngTemplateOutlet="uploadImgEditable"></ng-container>
+    </div>
+    <div *ngSwitchCase="false">
+      <ng-container *ngTemplateOutlet="uploadImg"></ng-container>
+    </div>
+  </div>
+
+  <div class="userBioBlock profile__right" [ngSwitch]="editable">
+    <div *ngSwitchCase="false">
+      <ng-container *ngTemplateOutlet="userBio"></ng-container>
+    </div>
+    <div *ngSwitchCase="true">
+      <ng-container *ngTemplateOutlet="userBioEditable"></ng-container>
+    </div>
+  </div>
+  <div class="saveBlock" *ngIf="editable">
+    <button mat-raised-button (click)="saveChanges()">Save</button>
+  </div>
+</div>
