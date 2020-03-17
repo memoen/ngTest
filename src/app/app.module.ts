@@ -8,10 +8,8 @@ import {LoginPageComponent} from './Login/login-page/login-page.component';
 import {MyProfilePageComponent} from './Profile/my-profile-page/my-profile-page.component';
 import {MyProfileViewPageComponent} from './Profile/my-profile-view-page/my-profile-view-page.component';
 import {MyProfileEditPageComponent} from './Profile/my-profile-edit-page/my-profile-edit-page.component';
-import {UserViewPageComponent} from './user-view-page/user-view-page.component';
 import {MapViewComponent} from './UserViewPage/map-view/map-view.component';
 import {ListViewComponent} from './UserViewPage/list-view/list-view.component';
-import {TopNavBarComponent} from './UserViewPage/top-nav-bar/top-nav-bar.component';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -29,10 +27,8 @@ import {MatRadioModule} from '@angular/material/radio';
     MyProfilePageComponent,
     MyProfileViewPageComponent,
     MyProfileEditPageComponent,
-    UserViewPageComponent,
     MapViewComponent,
     ListViewComponent,
-    TopNavBarComponent,
     PageContainerComponent
   ],
   imports: [

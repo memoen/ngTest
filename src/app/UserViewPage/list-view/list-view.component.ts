@@ -2,7 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {HttpService} from '../../services/http.service';
 import {combineLatest, Subject, timer} from 'rxjs';
 import {debounceTime, startWith} from 'rxjs/operators';
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {responseOkPagin, User} from '../../services/models';
 
 @Component({
   selector: 'app-list-view',
@@ -10,71 +11,108 @@ import {DomSanitizer} from '@angular/platform-browser';
   styleUrls: ['./list-view.component.sass']
 })
 export class ListViewComponent implements OnInit {
-  resultLength = 0;
-  pageLengthDef = 10;
-  pageLength = 10;
-  resultAsync = new Subject();
-  paginatorStatus = new Subject();
+  private pageLengthDef: number = 10;
+  /**
+   * @description emit current MatPaginator active page
+   */
+  private paginatorStatus: Subject<number> = new Subject();
+  public resultLength: number = 0;
+  public pageLength: number = 10;
+  public resultAsync: Subject<UserWithPhoto[]> = new Subject();
   @Input() filterAsync;
-
 
   constructor(private http: HttpService, private sanitizer: DomSanitizer) {
   }
 
-  ngOnInit(): void {
+  /**
+   * @description handle changes of paginator and input[firstName]
+   */
+  private handleFiltersChanges() {
     combineLatest(
-      this.filterAsync.pipe(startWith(''), debounceTime(() => {
-        return timer(1000);
-      })),
+      this.filterAsync.pipe(debounceTime(1000), startWith('')),
       this.paginatorStatus.pipe(startWith(0)),
       (word: string, page: number) => {
         return {word, page};
       }
     ).subscribe(async data => {
-      let result = [];
-      let page = data.page;
-
+      let result: User[] = [];
+      const page: number = data.page;
       if (data.word.trim().length === 0) {
-        const response = await this.getUserForPage(this.pageLength, page);
-        this.resultLength = response._meta.pagination.totalCount;
-        this.pageLength = this.pageLengthDef;
-        result = response['result'];
+        result = await this.getUserListForPageWithoutFilters(this.pageLength, page);
       } else {
-        let currentPage = 0;
-        let pageTotal = 0;
-        this.resultLength = this.pageLength;
-        do {
-          const response = await this.getUserForPage(50, currentPage);
-          pageTotal = response._meta.pagination.pageCount;
-          result.push(...response.result);
-          currentPage++;
-        }
-        while (currentPage <= pageTotal);
-        console.log(result);
-        console.log(data);
-        result = result.filter(user => {
-          return user.firstName && user.firstName.includes(data.word);
-        }).map(user => {
-          if (user.image && user.image.length > 0) {
-            user.imageSrc = this.sanitizer.bypassSecurityTrustResourceUrl(user.image);
-          }
-          return user;
-        });
-
-
-        this.pageLength = result.length;
-        console.log(result);
+        let userList: User[] = await this.getUserListWithFilter();
+        userList = this.filterUsersByFirstName(userList, data.word);
+        userList = this.insertImgPathInEachUser(userList);
+        result = userList;
+        this.resultLength = result.length;
       }
-
       this.resultAsync.next(result);
     });
   }
 
-  onPaginatorChange(ev) {
-    this.paginatorStatus.next(ev.pageIndex);
+
+  /**
+   * @description return all!! users in DB. This is not good: performance loss, multiple requests to server.
+   * @description But there is no way to filter User array by first name on BackEnd
+   * @param word
+   */
+  private async getUserListWithFilter() {
+    let currentPage = 0;
+    let pageTotal = 0;
+    const result: User[] = [];
+    do {
+      const response: responseOkPagin = await this.getUserForPage(50, currentPage);
+      pageTotal = response._meta.pagination.pageCount;
+      result.push(...response.result as User[]);
+      currentPage++;
+    }
+    while (currentPage <= pageTotal);
+    return result;
   }
 
-  getUserForPage(size, page) {
+  /**
+   * @description return users that contains filterValue in firstName. Also return user without: firstname,lastname and photo
+   * @param users
+   * @param firstName
+   */
+  private filterUsersByFirstName(users: User[], firstName: string): User[] {
+    return users.filter(user => {
+      return user.firstName && user.firstName.includes(firstName);
+    });
+  }
+
+  /**
+   * @description return Users with Secure Img Path
+   * @param users
+   */
+  private insertImgPathInEachUser(users: User[]): UserWithPhoto[] {
+    return users.map(user => {
+      const userWithPhoto = user as UserWithPhoto;
+      if (user.image && user.image.length > 0) {
+        userWithPhoto.imageSrc = this.sanitizer.bypassSecurityTrustResourceUrl(user.image);
+      }
+      return userWithPhoto;
+    });
+  }
+
+  /**
+   * @description return User list , modify resultLength and pageLength
+   * @param pageLength
+   * @param page
+   */
+  private async getUserListForPageWithoutFilters(pageLength, page): Promise<User[]> {
+    const response: responseOkPagin = await this.getUserForPage(pageLength, page);
+    this.resultLength = response._meta.pagination.totalCount;
+    this.pageLength = this.pageLengthDef;
+    return response.result as User[];
+  }
+
+  /**
+   * @description return User list for selected page, Max item per request 50
+   * @param size
+   * @param page
+   */
+  private getUserForPage(size: number, page: number): Promise<responseOkPagin> {
     return new Promise((resolve) => {
       this.http.Users(size, page).subscribe(data => {
         resolve(data);
@@ -82,5 +120,19 @@ export class ListViewComponent implements OnInit {
     });
   }
 
+  /**
+   * @description emit MatPaginator change
+   * @param ev
+   */
+  public onPaginatorChange(ev) {
+    this.paginatorStatus.next(ev.pageIndex);
+  }
 
+  ngOnInit(): void {
+    this.handleFiltersChanges();
+  }
+}
+
+interface UserWithPhoto extends User {
+  imageSrc?: SafeResourceUrl,
 }

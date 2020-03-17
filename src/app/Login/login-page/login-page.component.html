@@ -5,7 +5,7 @@
     </h1>
   </div>
   <div class="formInputBlock">
-    <form [formGroup]="loginForm">
+    <form class="formInputBlock__form" [formGroup]="loginForm">
       <mat-form-field>
         <mat-label>Login</mat-label>
         <input matInput formControlName="email">
@@ -15,8 +15,7 @@
         <input matInput formControlName="pass">
       </mat-form-field>
 
-      <div class="submicForm">
-
+      <div class="submitForm loginBlock">
         <button class="actionButton loginBlock__register" mat-stroked-button (click)="register()">
           <span>Register</span>
         </button>
@@ -26,8 +25,6 @@
       </div>
     </form>
   </div>
-
-
 
   <div class="loginBlock">
     <button  class="actionButton loginBlock__facebook" mat-stroked-button (click)="submitLogin()">

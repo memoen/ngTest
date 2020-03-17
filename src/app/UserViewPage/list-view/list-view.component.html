@@ -1,12 +1,19 @@
 <div class="container">
 
   <div class="userListBlock">
+    <div class="userListBlock__item" *ngFor="let user of resultAsync|async"
+         [routerLink]="'/profile/'+ user.id "
+    >
+      <ng-container [ngSwitch]="user.image !== null">
+        <div class="userInfo__img" *ngSwitchCase="true">
+          <img [src]="user.imageSrc" alt="">
+        </div>
+        <div class="userInfo__img" *ngSwitchCase="false">
+          <div class="emptyImageLike"></div>
+        </div>
+      </ng-container>
 
-    <div class="userListBlock__item" *ngFor="let user of resultAsync|async">
-      <div class="userInfo__img">
 
-        <img [src]="user.imageSrc" alt="">
-      </div>
       <div class="userInfo__bio">
         <div class="userBio">
            <span class="userBio__name">
@@ -25,13 +32,10 @@
             {{user.city}}
           </span>
         </div>
-
       </div>
     </div>
 
-
     <div class="paginatorBlock">
-
       <mat-paginator [length]="resultLength"
                      (page)="onPaginatorChange($event)"
                      [pageSize]="pageLength">

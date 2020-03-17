@@ -1,7 +1,6 @@
 <div class="container">
   <div class="topNavBarBlock">
     <div class="topNavBarBlock__viewType">
-
       <mat-button-toggle-group (change)="setNewViewType($event)" [value]="ViewType">
         <mat-button-toggle value="list" >
           <span>List</span>
@@ -9,7 +8,6 @@
         <mat-button-toggle value="map">
           <span>Map</span>
         </mat-button-toggle>
-
       </mat-button-toggle-group>
     </div>
     <div class="topNavBarBlock__search">
@@ -27,10 +25,10 @@
 
 
   <ng-container [ngSwitch]="ViewType">
-    <div class="wrapper wrapper__map" *ngSwitchCase="'map'">
+    <div class="wrapper wrapper__map" *ngSwitchCase="TypeOfView.map">
       <app-map-view [filterAsync]="filterAsync"></app-map-view>
     </div>
-    <div class="wrapper wrapper__list" *ngSwitchCase="'list'">
+    <div class="wrapper wrapper__list" *ngSwitchCase="TypeOfView.list">
       <app-list-view [filterAsync]="filterAsync"></app-list-view>
     </div>
   </ng-container>
