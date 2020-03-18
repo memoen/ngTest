@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MyProfileViewPageComponent } from './my-profile-view-page.component';
+import {RouterTestingModule} from '@angular/router/testing';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('MyProfileViewPageComponent', () => {
   let component: MyProfileViewPageComponent;
@@ -8,7 +10,8 @@ describe('MyProfileViewPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MyProfileViewPageComponent ]
+      declarations: [ MyProfileViewPageComponent ],
+      imports: [RouterTestingModule, HttpClientModule],
     })
     .compileComponents();
   }));

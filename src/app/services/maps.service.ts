@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
+import {google} from 'google-maps';
 
-declare let google;
+declare const google: any;
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +9,31 @@ declare let google;
 export class MapsService {
   geocoder: any = new google.maps.Geocoder();
   map: google.maps.Map;
-
   constructor() {
+
   }
+
+
+  /**
+   * @description return value between Point1 and Point2
+   * @param p1
+   * @param p2
+   */
+  public getDistanceBetweenPoints(p1: any, p2: any) {
+    return google.maps.geometry.spherical.computeDistanceBetween(p1, p2);
+  }
+
+  /**
+   * @description return value between Point1 and Point2, each point IMapLocation
+   * @param p1
+   * @param p2
+   */
+  public getDistanceBetweenPointsIMapLocation(p1: IMapLocation, p2: IMapLocation) {
+    const p1LatLng = new google.maps.LatLng(p1.lat, p1.lng);
+    const p2LatLng = new google.maps.LatLng(p2.lat, p2.lng);
+    return this.getDistanceBetweenPoints(p1LatLng, p2LatLng);
+  }
+
 
   /**
    * @description GMap Distance Api Call, return visible radius from center ( depends on zoom) and center
@@ -18,7 +41,7 @@ export class MapsService {
   public updateVisible(bounds, mapCenter) {
     const swPoint = bounds.getSouthWest();
     const nePoint = bounds.getNorthEast();
-    const visibleMeter = google.maps.geometry.spherical.computeDistanceBetween(swPoint, nePoint);
+    const visibleMeter = this.getDistanceBetweenPoints(swPoint, nePoint);
     const center = {lat: mapCenter.lat(), lng: mapCenter.lng()};
     return {
       radius: visibleMeter,

@@ -53,6 +53,8 @@ export class MyProfileEditPageComponent implements OnInit {
     return new Promise(resolve => {
       this.http.CurrentUser().subscribe(data => {
         resolve(data.result);
+      }, (err) => {
+        alertify.log('Msg :  ' + err.message);
       });
     });
   }
@@ -120,5 +122,6 @@ export class MyProfileEditPageComponent implements OnInit {
     alertify.log('Profile updated');
     this.navigateToListPage();
   }
+
 
 }

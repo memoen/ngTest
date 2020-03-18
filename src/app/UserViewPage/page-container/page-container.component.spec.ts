@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PageContainerComponent } from './page-container.component';
+import {HttpClientModule} from '@angular/common/http';
+import {RouterTestingModule} from '@angular/router/testing';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('PageContainerComponent', () => {
   let component: PageContainerComponent;
@@ -8,7 +11,8 @@ describe('PageContainerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PageContainerComponent ]
+      declarations: [PageContainerComponent],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
     })
     .compileComponents();
   }));
@@ -22,4 +26,13 @@ describe('PageContainerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should change view type', () => {
+    component.setNewViewType({value: 'list'});
+    expect(component.ViewType).toBe(component.TypeOfView.list);
+    component.setNewViewType({value: 'map'});
+    expect(component.ViewType).not.toBe(component.TypeOfView.list);
+  });
+
+
 });

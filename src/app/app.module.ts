@@ -13,13 +13,17 @@ import {ListViewComponent} from './UserViewPage/list-view/list-view.component';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {PageContainerComponent} from './UserViewPage/page-container/page-container.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatIconModule} from '@angular/material/icon';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatRadioModule} from '@angular/material/radio';
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {environment} from '../environments/environment';
+import {LocationUpdaterService} from './services/location-updater.service';
+import {ExpiredSessionInterceptor} from './services/invalidSessionInterceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,8 +49,13 @@ import {MatRadioModule} from '@angular/material/radio';
     MatIconModule,
     MatPaginatorModule,
     MatRadioModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
   ],
-  providers: [],
+  providers: [LocationUpdaterService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ExpiredSessionInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

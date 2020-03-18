@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {DomSanitizer, SafeResourceUrl, Title} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
 import {MapsService} from '../../services/maps.service';
 import {User} from '../../services/models';
@@ -27,14 +27,18 @@ export class MyProfilePageComponent implements OnInit {
   @Output('onSave') onSaveEv = new EventEmitter();
   @ViewChild('fileImg', {static: false}) fileImg;
 
-  constructor(private sanitize: DomSanitizer, private fb: FormBuilder) {
+  constructor(private sanitize: DomSanitizer, private fb: FormBuilder, private title: Title) {
+    title.setTitle('My Profile');
   }
 
   /**
    * @description convert User object to User form and set safe url for profile photo
    * @param userData
    */
-  private setUserData(userData: User) {
+  private setUserData(userData: User): void {
+    if (!userData) {
+      return;
+    }
     this.userBioForm = this.fb.group({
       firstName: userData.firstName,
       lastName: userData.lastName,
@@ -71,7 +75,7 @@ export class MyProfilePageComponent implements OnInit {
   /**
    * @description emit profile edit end and new User model
    */
-  public saveChanges() {
+  public saveChanges(): void {
     let file = null;
     if (this.fileImg.nativeElement.files && this.fileImg.nativeElement.files[0]) {
       file = this.fileImg.nativeElement.files[0];

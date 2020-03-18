@@ -33,7 +33,11 @@ export class PageContainerComponent implements OnInit {
    * @description set view type for page depends on url parameter
    */
   private setViewTypeFromUrl() {
-    this.router.snapshot.routeConfig.path === 'map' ? this.viewType = TypeOfView.map : this.viewType = TypeOfView.list;
+    if (this.router && this.router.snapshot.routeConfig && this.router.snapshot.routeConfig.path === 'map') {
+      this.viewType = TypeOfView.map;
+    } else {
+      this.viewType = TypeOfView.list;
+    }
   }
 
   /**

@@ -26,11 +26,11 @@ export interface ResponseModel {
   result: object,
 }
 
-export interface responseOk extends ResponseModel {
+export interface ResponseOk extends ResponseModel {
 }
 
 
-export interface responseOkPagin extends ResponseModel {
+export interface ResponseOkPagin extends ResponseModel {
   _meta: {
     pagination: {
       totalCount: number,

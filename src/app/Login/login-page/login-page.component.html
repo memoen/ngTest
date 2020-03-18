@@ -8,11 +8,11 @@
     <form class="formInputBlock__form" [formGroup]="loginForm">
       <mat-form-field>
         <mat-label>Login</mat-label>
-        <input matInput formControlName="email">
+        <input class="formInputBlock__form__login" matInput formControlName="email">
       </mat-form-field>
       <mat-form-field>
         <mat-label>Pass</mat-label>
-        <input matInput formControlName="pass">
+        <input class="formInputBlock__form__pass" type="password" matInput formControlName="pass">
       </mat-form-field>
 
       <div class="submitForm loginBlock">

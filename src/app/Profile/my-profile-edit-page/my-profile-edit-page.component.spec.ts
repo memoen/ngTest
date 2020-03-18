@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MyProfileEditPageComponent } from './my-profile-edit-page.component';
+import {RouterTestingModule} from '@angular/router/testing';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('MyProfileEditPageComponent', () => {
   let component: MyProfileEditPageComponent;
@@ -8,7 +10,8 @@ describe('MyProfileEditPageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MyProfileEditPageComponent ]
+      declarations: [MyProfileEditPageComponent],
+      imports: [RouterTestingModule, HttpClientModule],
     })
     .compileComponents();
   }));

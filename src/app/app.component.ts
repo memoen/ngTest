@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {LocationUpdaterService} from './services/location-updater.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'gbk';
+
+  constructor(private locationUpdater: LocationUpdaterService) {
+  }
+
 }

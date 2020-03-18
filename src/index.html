@@ -6,41 +6,46 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&amp;display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="assets/alertify/alertify.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#1976d2">
+
 </head>
 <body class="mat-typography">
-  <app-root></app-root>
-  <script
-    src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRmvN3KCXMePyHfFpIcECTsmLcgMlxeDc&libraries=geometry"
-          type="text/javascript"></script>
 
-  <script>
-      window.fbAsyncInit = function () {
-          FB.init({
-              appId: '2811971492228815',
-              cookie: true,
-              xfbml: true,
-              version: 'v6.0'
-          });
 
-          FB.AppEvents.logPageView();
 
-      };
-
-      (function (d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) {
-              return;
-          }
-          js = d.createElement(s);
-          js.id = id;
-          js.src = 'https://connect.facebook.net/en_US/sdk.js';
-          fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
-  </script>
+<app-root></app-root>
   <script src="assets/alertify/alertify.js"></script>
+<noscript>Please enable JavaScript to continue using this application.</noscript>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRmvN3KCXMePyHfFpIcECTsmLcgMlxeDc&amp;libraries=geometry"
+        type="text/javascript"></script>
+<script async defer
+        src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '2811971492228815',
+            cookie: true,
+            xfbml: true,
+            version: 'v6.0'
+        });
+        FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk.js';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
 </body>
 </html>

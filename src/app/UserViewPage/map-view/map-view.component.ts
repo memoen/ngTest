@@ -5,10 +5,12 @@ import {Router} from '@angular/router';
 import {interval, Observable, Subject, combineLatest} from 'rxjs';
 import {debounce, debounceTime, map, startWith} from 'rxjs/operators';
 import {User} from '../../services/models';
+import {Title} from '@angular/platform-browser';
 
 
 declare let MarkerClusterer;
 declare let alertify;
+declare const google: any;
 
 @Component({
   selector: 'app-map-view',
@@ -25,7 +27,8 @@ export class MapViewComponent implements OnInit, AfterViewInit {
   @ViewChild('mapContainer', {static: false}) gmap: ElementRef;
   @Input('filterAsync') filterAsync;
 
-  constructor(private http: HttpService, private maps: MapsService, private router: Router) {
+  constructor(private http: HttpService, private maps: MapsService, private router: Router, private title: Title) {
+    title.setTitle('Map view');
   };
 
 
@@ -33,6 +36,9 @@ export class MapViewComponent implements OnInit, AfterViewInit {
    * @description handle input[firstName] or map[move, resive], then update all markers on map
    */
   private handleFiltersChange(): void {
+    if (!this.filterAsync || !this.onMapViewChange) {
+      return;
+    }
     combineLatest(
       this.filterAsync.pipe(debounce(() => interval(500)), startWith('')),
       this.onMapViewChange.pipe(debounce(() => interval(1000)), startWith(true)),

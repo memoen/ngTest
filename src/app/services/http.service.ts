@@ -157,6 +157,8 @@ export class HttpService {
     this.credential.Token = '';
     return this.requestPostAuth('/v1/user/logout', {});
   }
+
+
 }
 
 

@@ -2,8 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {HttpService} from '../../services/http.service';
 import {combineLatest, Subject, timer} from 'rxjs';
 import {debounceTime, startWith} from 'rxjs/operators';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
-import {responseOkPagin, User} from '../../services/models';
+import {DomSanitizer, SafeResourceUrl, Title} from '@angular/platform-browser';
+import {ResponseOkPagin, User} from '../../services/models';
 
 @Component({
   selector: 'app-list-view',
@@ -21,13 +21,17 @@ export class ListViewComponent implements OnInit {
   public resultAsync: Subject<UserWithPhoto[]> = new Subject();
   @Input() filterAsync;
 
-  constructor(private http: HttpService, private sanitizer: DomSanitizer) {
+  constructor(private http: HttpService, private sanitizer: DomSanitizer, private title: Title) {
+    title.setTitle('List View');
   }
 
   /**
    * @description handle changes of paginator and input[firstName]
    */
-  private handleFiltersChanges() {
+  private handleFiltersChanges(): void {
+    if (!this.filterAsync || !this.paginatorStatus) {
+      return;
+    }
     combineLatest(
       this.filterAsync.pipe(debounceTime(1000), startWith('')),
       this.paginatorStatus.pipe(startWith(0)),
@@ -56,12 +60,12 @@ export class ListViewComponent implements OnInit {
    * @description But there is no way to filter User array by first name on BackEnd
    * @param word
    */
-  private async getUserListWithFilter() {
+  private async getUserListWithFilter(): Promise<User[]> {
     let currentPage = 0;
     let pageTotal = 0;
     const result: User[] = [];
     do {
-      const response: responseOkPagin = await this.getUserForPage(50, currentPage);
+      const response: ResponseOkPagin = await this.getUserForPage(50, currentPage);
       pageTotal = response._meta.pagination.pageCount;
       result.push(...response.result as User[]);
       currentPage++;
@@ -71,37 +75,12 @@ export class ListViewComponent implements OnInit {
   }
 
   /**
-   * @description return users that contains filterValue in firstName. Also return user without: firstname,lastname and photo
-   * @param users
-   * @param firstName
-   */
-  private filterUsersByFirstName(users: User[], firstName: string): User[] {
-    return users.filter(user => {
-      return user.firstName && user.firstName.includes(firstName);
-    });
-  }
-
-  /**
-   * @description return Users with Secure Img Path
-   * @param users
-   */
-  private insertImgPathInEachUser(users: User[]): UserWithPhoto[] {
-    return users.map(user => {
-      const userWithPhoto = user as UserWithPhoto;
-      if (user.image && user.image.length > 0) {
-        userWithPhoto.imageSrc = this.sanitizer.bypassSecurityTrustResourceUrl(user.image);
-      }
-      return userWithPhoto;
-    });
-  }
-
-  /**
    * @description return User list , modify resultLength and pageLength
    * @param pageLength
    * @param page
    */
   private async getUserListForPageWithoutFilters(pageLength, page): Promise<User[]> {
-    const response: responseOkPagin = await this.getUserForPage(pageLength, page);
+    const response: ResponseOkPagin = await this.getUserForPage(pageLength, page);
     this.resultLength = response._meta.pagination.totalCount;
     this.pageLength = this.pageLengthDef;
     return response.result as User[];
@@ -112,11 +91,36 @@ export class ListViewComponent implements OnInit {
    * @param size
    * @param page
    */
-  private getUserForPage(size: number, page: number): Promise<responseOkPagin> {
+  private getUserForPage(size: number, page: number): Promise<ResponseOkPagin> {
     return new Promise((resolve) => {
       this.http.Users(size, page).subscribe(data => {
         resolve(data);
       });
+    });
+  }
+
+  /**
+   * @description return users that contains filterValue in firstName. Also return user without: firstname,lastname and photo
+   * @param users
+   * @param firstName
+   */
+  public filterUsersByFirstName(users: User[], firstName: string): User[] {
+    return users.filter(user => {
+      return user.firstName && user.firstName.includes(firstName);
+    });
+  }
+
+  /**
+   * @description return Users with Secure Img Path
+   * @param users
+   */
+  public insertImgPathInEachUser(users: User[]): UserWithPhoto[] {
+    return users.map(user => {
+      const userWithPhoto = user as UserWithPhoto;
+      if (user.image && user.image.length > 0) {
+        userWithPhoto.imageSrc = this.sanitizer.bypassSecurityTrustResourceUrl(user.image);
+      }
+      return userWithPhoto;
     });
   }
 

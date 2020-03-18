@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
-import {Route, Router} from '@angular/router';
+import { Router} from '@angular/router';
 import {CredentialService} from '../../services/credential.service';
 import {ResponseModel, Token} from '../../services/models';
+import {Title} from "@angular/platform-browser";
 
 declare let FB;
 declare let alertify;
@@ -27,7 +28,10 @@ export class LoginPageComponent implements OnInit {
 
   constructor(private http: HttpService,
               private router: Router,
-              private credential: CredentialService) {
+              private credential: CredentialService,
+              private title: Title,
+  ) {
+    title.setTitle('Login Page');
   }
 
   ngOnInit(): void {

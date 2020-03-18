@@ -1,18 +1,17 @@
 import { TestBed } from '@angular/core/testing';
 
-import { HttpService } from './http.service';
-import {CredentialService} from './credential.service';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { LocationUpdaterService } from './location-updater.service';
 import {HttpClientModule} from '@angular/common/http';
+import {RouterTestingModule} from '@angular/router/testing';
 
-describe('HttpService', () => {
-  let service: HttpService;
+describe('LocationUpdaterService', () => {
+  let service: LocationUpdaterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
     });
-    service = TestBed.inject(HttpService);
+    service = TestBed.inject(LocationUpdaterService);
   });
 
   it('should be created', () => {

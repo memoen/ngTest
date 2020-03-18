@@ -13,4 +13,11 @@ describe('CredentialService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should get set token', () => {
+    service.Token = 'token';
+    expect(service.Token).toBe('token');
+  });
 });
+
+

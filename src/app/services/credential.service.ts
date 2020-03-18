@@ -4,7 +4,7 @@ import {Injectable} from '@angular/core';
   providedIn: 'root'
 })
 export class CredentialService {
-  private token: string = '';
+  private token = '';
 
   public get Token(): string {
     return this.token;
